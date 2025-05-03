@@ -8,22 +8,22 @@ st.write("Esta aplicación muestra un análisis exploratorio de un conjunto de d
 try:
     data = pd.read_parquet('data_limpia.parquet')
 except FileNotFoundError:
-    st.error("No se encontró el archivo 'data_limpia.parquet'. Asegúrate de que esté en la misma carpeta.")
+    st.error("No se encontró el archivo 'data_limpia.parquet'. Asegúrate de que esté en la misma carpeta que app.py.")
     st.stop()
 
-st.header("Distribución de Precios de Vehículos")
-st.write("Este gráfico muestra la distribución de precios de los vehículos en el conjunto de datos.")
-fig_price = px.histogram(data, x='price', title='Distribución de Precios')
-st.plotly_chart(fig_price)
+st.header("Visualizaciones Interactivas")
 
-st.header("Distribución de Años de Modelo")
-st.write("Este gráfico muestra la distribución de los años de modelo de los vehículos.")
-fig_year = px.histogram(data, x='model_year', title='Distribución de Años de Modelo')
-st.plotly_chart(fig_year)
+hist_button = st.button('Construir histograma del odómetro')
 
-st.header("Top 10 Modelos de Vehículos")
-st.write("Este gráfico muestra los 10 modelos de vehículos más frecuentes.")
-model_counts = data['model'].value_counts().nlargest(10).reset_index()
-model_counts.columns = ['model', 'count']
-fig_models = px.bar(model_counts, x='model', y='count', title='Top 10 Modelos')
-st.plotly_chart(fig_models)
+if hist_button:
+    st.write('Creando un histograma para la columna odómetro')
+    fig_hist = px.histogram(data, x="odometer")
+    st.plotly_chart(fig_hist, use_container_width=True)
+
+scatter_button = st.button('Construir gráfico de dispersión (precio vs. año)')
+
+if scatter_button:
+    st.write('Creando un gráfico de dispersión para precio vs. año')
+    fig_scatter = px.scatter(data, x="model_year", y="price")
+    st.plotly_chart(fig_scatter, use_container_width=True)
+    
